@@ -1,0 +1,41 @@
+name: Pipeline
+
+defaults:
+  run:
+    shell: bash
+
+on:
+  push:
+    branches-ignore:
+      - master
+
+jobs:
+  install-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: '12'
+
+      - uses: actions/setup-python@v2
+        with:
+          # Ensure Python 3.8 matches everywhere.
+          python-version: 3.8
+
+      - name: Install
+        run: |
+          python --version
+          node --version
+          npm --version
+
+          npm install -g aws-cdk@1.x
+
+          python -m pip install . --upgrade
+          pip install -r b_dynamodb_common_test/requirements.txt
+          python -m pip list
+
+      - name: UnitTest
+        run: pytest --cov=b_dynamodb_common b_dynamodb_common_test/unit --cov-fail-under=80

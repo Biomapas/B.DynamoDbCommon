@@ -1,0 +1,57 @@
+name: Pipeline
+
+defaults:
+  run:
+    shell: bash
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  install-test-build-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: '12'
+
+      - uses: actions/setup-python@v2
+        with:
+          # Ensure Python 3.8 matches everywhere.
+          python-version: 3.8
+
+      - name: Install
+        run: |
+          python --version
+          node --version
+          npm --version
+
+          npm install -g aws-cdk@1.x
+
+          python -m pip install . --upgrade
+          pip install -r b_dynamodb_common_test/requirements.txt
+          python -m pip list
+
+      - name: UnitTest
+        run: pytest --cov=b_dynamodb_common b_dynamodb_common_test/unit --cov-fail-under=80
+
+      - name: IntegrationTest
+        run: |
+          export AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
+          export AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          export AWS_DEFAULT_REGION=${{ secrets.AWS_DEFAULT_REGION }}
+          pytest b_dynamodb_common_test/integration/tests
+
+      - name: Install
+        run: pip install wheel twine
+
+      - name: Build
+        run: python setup.py sdist bdist_wheel
+
+      - name: Upload
+        run: twine upload dist/* -u ${{ secrets.PYPI_USERNAME }} -p ${{ secrets.PYPI_PASSWORD }}
