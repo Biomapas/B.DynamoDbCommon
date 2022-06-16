@@ -7,6 +7,10 @@ from b_aws_testing_framework.tools.cdk_testing.testing_manager import TestingMan
 CDK_PATH = f'{os.path.dirname(os.path.abspath(__file__))}'
 MANAGER = TestingManager(Credentials(), CdkToolConfig(CDK_PATH, destroy_before_preparing=False))
 
+# Import all fixtures.
+# noinspection PyUnresolvedReferences
+from .fixtures import *
+
 
 def pytest_sessionstart(session):
     MANAGER.prepare_infrastructure()
