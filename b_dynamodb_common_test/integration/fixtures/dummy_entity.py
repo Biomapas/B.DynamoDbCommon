@@ -10,8 +10,8 @@ from b_dynamodb_common_test.integration.infrastructure import Infrastructure
 
 class DummyEntity(Model):
     class Meta:
-        table_name = Infrastructure.get_output(Infrastructure.DYNAMODB_TABLE_NAME_KEY)
-        region = Infrastructure.get_output(Infrastructure.DYNAMODB_TABLE_REGION_KEY)
+        table_name = Infrastructure.DYNAMODB_TABLE_NAME
+        region = Infrastructure.DYNAMODB_TABLE_REGION
 
     pk = UnicodeAttribute(hash_key=True)
     data = UnicodeAttribute()

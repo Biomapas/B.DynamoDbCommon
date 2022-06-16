@@ -14,10 +14,8 @@ from .fixtures import *
 
 
 def pytest_sessionstart(session):
-    MANAGER.set_global_prefix(override=False)
     MANAGER.prepare_infrastructure()
 
 
 def pytest_sessionfinish(session, exitstatus):
-    MANAGER.set_global_prefix(override=False)
     MANAGER.destroy_infrastructure()
