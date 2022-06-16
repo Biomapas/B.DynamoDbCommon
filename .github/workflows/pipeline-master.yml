@@ -37,8 +37,8 @@ jobs:
           pip install -r b_dynamodb_common_test/requirements.txt
           python -m pip list
 
-      - name: UnitTest
-        run: pytest --cov=b_dynamodb_common b_dynamodb_common_test/unit --cov-fail-under=80
+#      - name: UnitTest
+#        run: pytest --cov=b_dynamodb_common b_dynamodb_common_test/unit --cov-fail-under=80
 
       - name: IntegrationTest
         run: |

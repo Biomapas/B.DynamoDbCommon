@@ -23,6 +23,7 @@ class PynamoDBListResult(List[T]):
         return self.__last_evaluated_key
 
     def fetch(self, recursive: bool = False) -> PynamoDBListResult[T]:
+        # TODO do not allow to call this function after completely all results are fetched.
         while True:
             self.__fetch_single_result()
 
