@@ -1,26 +1,19 @@
-import uuid
-
 from b_dynamodb_common.utils.pynamodb_list_function import PynamoDBListFunction
-from b_dynamodb_common_test.integration.util.dummy_model import Dummy
+from b_dynamodb_common_test.integration.fixtures.dummy_entity import DummyEntity
 
 
-def test_FUNC_call_WITH_pynamodb_query_function_EXPECT_iterator_returned():
-    pk = str(uuid.uuid4())
-    data = str(uuid.uuid4())
+def test_FUNC_call_WITH_pynamodb_query_function_EXPECT_iterator_returned(dummy_entity_function):
+    dummy = dummy_entity_function()
 
-    seed_data = [(str(uuid.uuid4()), str(uuid.uuid4())) for _ in range(10)]
-    seed_data.append((pk, data))
+    # Create more dummy data.
+    [dummy_entity_function() for _ in range(10)]
 
-    for item in seed_data:
-        dum = Dummy()
-        dum.pk = item[0]
-        dum.data = item[1]
-        dum.save()
-
-    list_function: PynamoDBListFunction[Dummy] = PynamoDBListFunction(Dummy.query, pk)
+    list_function: PynamoDBListFunction[DummyEntity] = PynamoDBListFunction(DummyEntity.query, dummy.pk)
     items = list(list_function())
 
+    # Ensure only single entity was found.
     assert len(items) == 1
 
-    assert items[0].pk == pk
-    assert items[0].data == data
+    # Ensure that it is the same entity with same data.
+    assert items[0].pk == dummy.pk
+    assert items[0].data == dummy.data
