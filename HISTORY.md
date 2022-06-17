@@ -1,5 +1,8 @@
 # Release history
 
+### 0.0.5
+* Add Fernet and KMS attribute tests.
+
 ### 0.0.4
 * Add Dynamo and Pynamo encoders tests.
 
