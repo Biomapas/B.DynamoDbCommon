@@ -16,14 +16,23 @@ class PynamoDBListResult(List[T]):
     ) -> None:
         super().__init__([])
         self.__list_function: PynamoDBListFunction[T] = list_function
+        # Last evaluated key is set if not all results have been fetched from dynamodb table.
         self.__last_evaluated_key: Optional[str] = None
+        # A flag that determines whether all results have been fetched from the database.
+        self.__finished = False
 
     @property
     def last_evaluated_key(self) -> Optional[str]:
         return self.__last_evaluated_key
 
+    @property
+    def finished(self) -> bool:
+        return self.__finished
+
     def fetch(self, recursive: bool = False) -> PynamoDBListResult[T]:
-        # TODO do not allow to call this function after completely all results are fetched.
+        if self.finished:
+            raise RecursionError('All items have already been fetched.')
+
         while True:
             self.__fetch_single_result()
 
@@ -37,5 +46,8 @@ class PynamoDBListResult(List[T]):
 
         self.extend(list(result_iterator))
         self.__last_evaluated_key: Optional[str] = result_iterator.last_evaluated_key
+
+        if self.__last_evaluated_key is None:
+            self.__finished = True
 
         return self
