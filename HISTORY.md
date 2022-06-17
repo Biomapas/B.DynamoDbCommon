@@ -1,5 +1,8 @@
 # Release history
 
+### 0.0.4
+* Add Dynamo and Pynamo encoders tests.
+
 ### 0.0.3
 * Add tests to test PermissionModel base class.
 

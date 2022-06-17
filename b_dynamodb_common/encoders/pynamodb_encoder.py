@@ -2,10 +2,10 @@ from typing import Any
 
 from pynamodb.attributes import MapAttribute
 
-from b_dynamodb_common.encoders.dynamodb_encoder import DynamoDBEncoder
+from b_dynamodb_common.encoders.dynamodb_encoder import DynamoDbEncoder
 
 
-class PynamoDbEncoder(DynamoDBEncoder):
+class PynamoDbEncoder(DynamoDbEncoder):
     def default(self, o: Any):
 
         if isinstance(o, MapAttribute):

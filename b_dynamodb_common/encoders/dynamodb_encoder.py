@@ -5,7 +5,7 @@ from typing import Any
 from ordered_set import OrderedSet
 
 
-class DynamoDBEncoder(JSONEncoder):
+class DynamoDbEncoder(JSONEncoder):
     def default(self, o: Any):
 
         if isinstance(o, (set, OrderedSet)):
@@ -14,4 +14,4 @@ class DynamoDBEncoder(JSONEncoder):
         if isinstance(o, Decimal):
             return float(o)
 
-        return super(DynamoDBEncoder, self).default(o)
+        return super(DynamoDbEncoder, self).default(o)
