@@ -1,5 +1,8 @@
 # Release history
 
+### 0.0.6
+* Add documentation.
+
 ### 0.0.5
 * Add Fernet and KMS attribute tests.
 
