@@ -15,7 +15,7 @@ class PynamoDBListResult(List[T]):
             list_function: PynamoDBListFunction[T],
     ) -> None:
         super().__init__([])
-        self.__list_function: PynamoDBListFunction[T] = list_function
+        self.__list_function = list_function
         # Last evaluated key is set if not all results have been fetched from dynamodb table.
         self.__last_evaluated_key: Optional[str] = None
         # A flag that determines whether all results have been fetched from the database.
@@ -41,13 +41,11 @@ class PynamoDBListResult(List[T]):
 
         return self
 
-    def __fetch_single_result(self) -> PynamoDBListResult[T]:
-        result_iterator: ResultIterator[T] = self.__list_function(last_evaluated_key=self.__last_evaluated_key)
+    def __fetch_single_result(self) -> None:
+        items, last_evaluated_key = self.__list_function(last_evaluated_key=self.__last_evaluated_key)
 
-        self.extend(list(result_iterator))
-        self.__last_evaluated_key: Optional[str] = result_iterator.last_evaluated_key
+        self.extend(items)
+        self.__last_evaluated_key = last_evaluated_key
 
         if self.__last_evaluated_key is None:
             self.__finished = True
-
-        return self

@@ -1,5 +1,3 @@
-import uuid
-
 import pytest
 
 from b_dynamodb_common.utils.pynamodb_list_function import PynamoDBListFunction
@@ -11,7 +9,7 @@ def test_FUNC_fetch_WITH_pynamodb_scan_function_EXPECT_results_returned(dummy_en
     entities = [dummy_entity_function() for _ in range(50)]
 
     # Create more dummy data.
-    [(str(uuid.uuid4()), str(uuid.uuid4())) for _ in range(50)]
+    [dummy_entity_function() for _ in range(50)]
 
     list_function: PynamoDBListFunction[DummyEntity] = PynamoDBListFunction(
         DummyEntity.scan,
