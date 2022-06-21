@@ -1,6 +1,6 @@
 # Release history
 
-### 0.1.0
+### 0.2.0
 * Add transformer functions to transform returned results.
 * P.S. still not a stable version.
 

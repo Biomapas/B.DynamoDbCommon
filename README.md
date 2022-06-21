@@ -148,6 +148,25 @@ entity.add_permission('permission')
 entity.save()
 ```
 
+- **Model type factory**
+
+Allows to use the same pynamodb Model against multiple databases.
+
+```python
+from pynamodb.models import Model
+
+# Create your own model. Example, User model.
+class User(Model): pass
+
+# Specify table 1 against which an example user will be saved.
+user_model_table_1 = ModelTypeFactory(User).create('user_table_1', 'eu-west-1')
+user_model_table_1(hash_key='hash', range_key='range').save()
+
+# Specify another table and save user in different table.
+user_model_table_2 = ModelTypeFactory(User).create('user_table_2', 'eu-east-1')
+user_model_table_2(hash_key='hash', range_key='range').save()
+```
+
 #### Seeds
 
 Currently this module is empty.
@@ -163,6 +182,19 @@ Wraps PynamoDB `query` and `scan` functions for better management.
 ```python
 list_function: PynamoDBListFunction[DummyEntity] = PynamoDBListFunction(DummyEntity.query, 'PK')
 items = list(list_function())
+
+# You can also specify a transformer function to transform results before returning.
+list_function: PynamoDBListFunction[DummyEntity] = PynamoDBListFunction(
+    # PynamoDB list function (query).
+    DummyEntity.query, 
+    # Positional arguments.
+    'PK',
+    # Transformer function.
+    transformer=lambda item: item.pk
+)
+
+# Will contain only pks.
+ids = list(list_function())
 ```
 - **List results**
 
