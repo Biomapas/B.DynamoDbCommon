@@ -24,15 +24,15 @@ class PermissionModel(Model):
         if not isinstance(value, list):
             raise ValueError('Permissions attribute must be a list.')
 
-        self.__validate_permissions(*value)
+        self.validate_permissions(*value)
         self._permissions = list(set(value))
 
     def add_permission(self, permission: str) -> None:
-        self.__validate_permissions(permission)
+        self.validate_permissions(permission)
         self._permissions.append(permission)
 
     @staticmethod
-    def __validate_permissions(*permissions: Union[str, List[str]]) -> None:
+    def validate_permissions(*permissions: Union[str, List[str]]) -> None:
         # Ensure values in the list are valid permissions.
         for permission in permissions:
             PermissionModel.__validate_permission(permission)

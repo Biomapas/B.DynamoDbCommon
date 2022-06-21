@@ -1,6 +1,12 @@
 # Release history
 
+### 0.3.0
+* Expose `validate_permissions` method.
+
 ### 0.2.0
+* Add model type factory to allow dynamic `table_name` and `region` specification.
+
+### 0.1.0
 * Add transformer functions to transform returned results.
 * P.S. still not a stable version.
 
