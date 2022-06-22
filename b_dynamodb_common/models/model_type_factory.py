@@ -1,5 +1,6 @@
 from typing import TypeVar, Generic, Type
 
+from pynamodb.indexes import Index
 from pynamodb.models import Model
 
 T = TypeVar('T')
@@ -40,5 +41,14 @@ class ModelTypeFactory(Generic[T]):
             class Meta:
                 table_name = custom_table_name
                 region = custom_region
+
+        # All initialized indexes will not have model Meta attribute, hence, any operation
+        # against the index is going to fail. In order to fix that, for each index
+        # set inner model's meta attribute.
+        for attribute_name in dir(parent_class):
+            attribute = getattr(parent_class, attribute_name)
+            if isinstance(attribute, Index):
+                # Reverse engineering magic at its finest.
+                attribute.Meta.model.Meta = InnerModel.Meta
 
         return InnerModel

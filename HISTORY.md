@@ -1,5 +1,10 @@
 # Release history
 
+### 0.4.0
+* Model type factory for dynamic table use now supports `Indexes` 
+  (global or local). Previously if you had e.g. GSI in your model, 
+  you would get a "Missing Meta" error.
+
 ### 0.3.0
 * Expose `validate_permissions` method.
 
