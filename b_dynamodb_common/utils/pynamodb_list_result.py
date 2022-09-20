@@ -1,8 +1,6 @@
 from __future__ import annotations
 
-from typing import TypeVar, List, Optional
-
-from pynamodb.pagination import ResultIterator
+from typing import Any, Dict, TypeVar, List, Optional
 
 from b_dynamodb_common.utils.pynamodb_list_function import PynamoDBListFunction
 
@@ -17,12 +15,12 @@ class PynamoDBListResult(List[T]):
         super().__init__([])
         self.__list_function = list_function
         # Last evaluated key is set if not all results have been fetched from dynamodb table.
-        self.__last_evaluated_key: Optional[str] = None
+        self.__last_evaluated_key: Optional[Dict[str, Any]] = None
         # A flag that determines whether all results have been fetched from the database.
         self.__finished = False
 
     @property
-    def last_evaluated_key(self) -> Optional[str]:
+    def last_evaluated_key(self) -> Optional[Dict[str, Any]]:
         return self.__last_evaluated_key
 
     @property
@@ -42,7 +40,8 @@ class PynamoDBListResult(List[T]):
         return self
 
     def __fetch_single_result(self) -> None:
-        items, last_evaluated_key = self.__list_function(last_evaluated_key=self.__last_evaluated_key)
+        kwargs = dict(last_evaluated_key=self.last_evaluated_key) if self.last_evaluated_key else dict()
+        items, last_evaluated_key = self.__list_function(**kwargs)
 
         self.extend(items)
         self.__last_evaluated_key = last_evaluated_key

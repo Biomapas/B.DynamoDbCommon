@@ -1,5 +1,8 @@
 # Release history
 
+### 0.4.1
+* Improve `pynamodb_list_result` class.
+
 ### 0.4.0
 * Model type factory for dynamic table use now supports `Indexes` 
   (global or local). Previously if you had e.g. GSI in your model, 
